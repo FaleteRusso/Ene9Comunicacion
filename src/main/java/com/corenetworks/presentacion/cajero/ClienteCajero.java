@@ -17,7 +17,7 @@ public class ClienteCajero {
         System.out.println(cB1.toString());
         try(Socket cl = new Socket("localhost", 3000);) {
             PrintWriter mAE = new PrintWriter(cl.getOutputStream(),true);
-            mAE.println(cB1.getTipoOperacion()+cB1.getId()+cB1.getCantidad());
+            mAE.println(cB1.getTipoOperacion()+","+cB1.getId()+","+cB1.getCantidad());
             System.out.println("Esperando respuesta del servidor...");
             BufferedReader mR = new BufferedReader(new InputStreamReader(cl.getInputStream()));
             System.out.println(mR.readLine());
