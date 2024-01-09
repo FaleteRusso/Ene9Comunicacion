@@ -13,21 +13,25 @@ import java.util.concurrent.Callable;
 
 public class ClienteCajero {
     public static void main(String[] args) {
-        CuentaBancaria cB1 =solicitarDatos();
-        System.out.println(cB1.toString());
-        try(Socket cl = new Socket("localhost", 3000);) {
-            PrintWriter mAE = new PrintWriter(cl.getOutputStream(),true);
-            mAE.println(cB1.getTipoOperacion()+","+cB1.getId()+","+cB1.getCantidad());
-            System.out.println("Esperando respuesta del servidor...");
-            BufferedReader mR = new BufferedReader(new InputStreamReader(cl.getInputStream()));
-            System.out.println(mR.readLine());
-        } catch (UnknownHostException e) {
-            System.out.println(e.toString());
-        } catch (IOException e) {
-            System.out.println(e.toString());
+        while (true) {
+            CuentaBancaria cB1 = solicitarDatos();
+            if (cB1.getTipoOperacion() == null) {
+                break;
+            }
+            System.out.println(cB1.toString());
+            try (Socket cl = new Socket("localhost", 3000);) {
+                PrintWriter mAE = new PrintWriter(cl.getOutputStream(), true);
+                mAE.println(cB1.getTipoOperacion() + "," + cB1.getId() + "," + cB1.getCantidad());
+                System.out.println("Esperando respuesta del servidor...");
+                BufferedReader mR = new BufferedReader(new InputStreamReader(cl.getInputStream()));
+                System.out.println(mR.readLine());
+            } catch (UnknownHostException e) {
+                System.out.println(e.toString());
+            } catch (IOException e) {
+                System.out.println(e.toString());
+            }
         }
     }
-
     private static CuentaBancaria solicitarDatos() {
         CuentaBancaria cB1= new CuentaBancaria();
         int tipoOperacion=0;
@@ -43,9 +47,9 @@ public class ClienteCajero {
             System.out.printf("Escriba la opción -> ");
             tipoOperacion = sc.nextInt();
             sc.nextLine();
-            /*if(tipoOperacion ==4){
-                break;
-            }*/
+            if(tipoOperacion ==4){
+                return cB1;
+            }
             System.out.printf("Escriba la cuenta -> ");
             cB1.setId(sc.nextLine());
             if (tipoOperacion == 2 || tipoOperacion == 3) {
@@ -53,8 +57,6 @@ public class ClienteCajero {
                 cB1.setCantidad(sc.nextDouble());
             }
             cB1.setTipoOperacion(Integer.toString(tipoOperacion));
-
-
-        return  cB1;
+            return  cB1;
     }
 }
