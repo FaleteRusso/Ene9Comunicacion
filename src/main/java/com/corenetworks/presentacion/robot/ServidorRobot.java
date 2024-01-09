@@ -19,12 +19,13 @@ public class ServidorRobot {
                 mE=new BufferedReader(new InputStreamReader(s1.getInputStream()));
                 String pregunta = mE.readLine();
                 int indice = Integer.parseInt(pregunta);
-                mS=new PrintWriter(s1.getOutputStream());
+                mS=new PrintWriter(s1.getOutputStream(),true);
                 mS.println(respuestas[indice-1]);
+                System.out.println(respuestas[indice-1]);
             }
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.toString());
         }
     }
 }

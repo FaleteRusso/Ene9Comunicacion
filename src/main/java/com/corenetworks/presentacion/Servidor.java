@@ -9,16 +9,18 @@ import java.net.Socket;
 
 public class Servidor {
     public static void main(String[] args) {
-     try(ServerSocket sv = new ServerSocket(3001);) {
-         //2. Ponerlo a la escucha
-         while (true) {
-             System.out.println("En espera de registrar mensajes ...");
-             Socket s1 = sv.accept();
+        String[] respuestas = {"Desde las 10:00 hasta las 21:00", "Dias festivos de Madrid", "Si","30 €"};
+        try(ServerSocket servidor = new ServerSocket(3000);) {
+            while(true){
+                System.out.println("Esperando peticion ...");
+                Socket s1 = servidor.accept();
+                BufferedReader mE = new BufferedReader(new InputStreamReader(s1.getInputStream()));
+                String pregunta = mE.readLine();
+                int indice = Integer.parseInt(pregunta);
+                PrintWriter mS = new PrintWriter(s1.getOutputStream(),true);
+                mS.println(respuestas[indice-1]);
+                System.out.println(respuestas[indice-1]);
 
-             BufferedReader bf = new BufferedReader(new InputStreamReader(s1.getInputStream()));
-             System.out.println(bf.readLine());
-             PrintWriter sResp = new PrintWriter(s1.getOutputStream(),true);
-             sResp.println("Se ha recibido su mensaje");
 
              }
          } catch (IOException e) {
