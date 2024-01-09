@@ -29,11 +29,13 @@ public class ServidorCajero {
                      break;
                      case "2":if(saldo>=cantidad){
                          mAE.println("Su saldo es -> "+(saldo-cantidad));
+                         saldo-=cantidad;
                      }else {
                          mAE.println("Saldo insuficiente "+(saldo));
                      }
                      break;
                      case "3":mAE.println("Su saldo es -> "+(saldo+cantidad));
+                     saldo+=cantidad;
                      break;
                  }
              }

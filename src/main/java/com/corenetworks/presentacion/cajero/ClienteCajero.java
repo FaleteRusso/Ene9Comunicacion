@@ -8,36 +8,59 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.sql.SQLOutput;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
 
 public class ClienteCajero {
+    private static Scanner sc = new Scanner(System.in);
     public static void main(String[] args) {
-        while (true) {
-            CuentaBancaria cB1 = solicitarDatos();
-            if (cB1.getTipoOperacion() == null) {
-                break;
-            }
-            System.out.println(cB1.toString());
-            try (Socket cl = new Socket("localhost", 3000);) {
-                PrintWriter mAE = new PrintWriter(cl.getOutputStream(), true);
-                mAE.println(cB1.getTipoOperacion() + "," + cB1.getId() + "," + cB1.getCantidad());
-                System.out.println("Esperando respuesta del servidor...");
-                BufferedReader mR = new BufferedReader(new InputStreamReader(cl.getInputStream()));
-                System.out.println(mR.readLine());
-            } catch (UnknownHostException e) {
-                System.out.println(e.toString());
-            } catch (IOException e) {
-                System.out.println(e.toString());
+        if(solicitarPin()) {
+            while (true) {
+                CuentaBancaria cB1 = solicitarDatos();
+                if (cB1.getTipoOperacion() == null) {
+                    break;
+                }
+                System.out.println(cB1.toString());
+                try (Socket cl = new Socket("localhost", 3000);) {
+                    PrintWriter mAE = new PrintWriter(cl.getOutputStream(), true);
+                    mAE.println(cB1.getTipoOperacion() + "," + cB1.getId() + "," + cB1.getCantidad());
+                    System.out.println("Esperando respuesta del servidor...");
+                    BufferedReader mR = new BufferedReader(new InputStreamReader(cl.getInputStream()));
+                    System.out.println(mR.readLine());
+                } catch (UnknownHostException e) {
+                    System.out.println(e.toString());
+                } catch (IOException e) {
+                    System.out.println(e.toString());
+                }
             }
         }
     }
-    private static CuentaBancaria solicitarDatos() {
-        CuentaBancaria cB1= new CuentaBancaria();
-        int tipoOperacion=0;
-        Scanner sc = new Scanner(System.in);
 
-            System.out.printf("%s %n", "-".repeat(50));
+    private static boolean solicitarPin() {
+        int contador = 0 ;
+
+        String pin = null;
+        while (true) {
+            System.out.println("escriba su codigo PIN");
+            pin = sc.nextLine();
+            if (pin.equals(("1234"))) {
+                return true;
+            } else {
+                System.out.println("PIN Incorrecto");
+                contador++;
+                if (contador == 3) {
+                    System.out.println("Su tarjeta ha sido bloqueda tras 3 PIN incorrectos");
+                    return false;
+                }
+            }
+        }
+    }
+
+    private static CuentaBancaria solicitarDatos() {
+        CuentaBancaria cB1 = new CuentaBancaria();
+        int tipoOperacion = 0;
+        System.out.printf("%s %n", "-".repeat(50));
             System.out.printf("%s %n", "MENU BANCARIO");
             System.out.printf("%s %n", "-".repeat(50));
             System.out.printf("%s %n", "1) Consultar Saldo");
@@ -47,7 +70,7 @@ public class ClienteCajero {
             System.out.printf("Escriba la opción -> ");
             tipoOperacion = sc.nextInt();
             sc.nextLine();
-            if(tipoOperacion ==4){
+            if (tipoOperacion == 4) {
                 return cB1;
             }
             System.out.printf("Escriba la cuenta -> ");
@@ -57,6 +80,6 @@ public class ClienteCajero {
                 cB1.setCantidad(sc.nextDouble());
             }
             cB1.setTipoOperacion(Integer.toString(tipoOperacion));
-            return  cB1;
-    }
+            return cB1;
+        }
 }
