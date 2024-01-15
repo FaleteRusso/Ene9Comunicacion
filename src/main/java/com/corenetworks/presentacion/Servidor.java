@@ -9,7 +9,6 @@ import java.net.Socket;
 
 public class Servidor {
     public static void main(String[] args) {
-        String[] respuestas = {"Desde las 10:00 hasta las 21:00", "Dias festivos de Madrid", "Si","30 €"};
         BufferedReader mE;
         PrintWriter mS;
     try(ServerSocket servidor = new ServerSocket(3001);) {
