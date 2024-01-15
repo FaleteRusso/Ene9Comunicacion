@@ -17,9 +17,8 @@ public class Servidor {
                 System.out.println("Esperando peticion ...");
                 Socket s1 = servidor.accept();
                  mE = new BufferedReader(new InputStreamReader(s1.getInputStream()));
-                String pregunta = mE.readLine();
-                int indice = Integer.parseInt(pregunta);
-                 mS = new PrintWriter(s1.getOutputStream(),true);
+                System.out.println(mE.readLine());
+                mS = new PrintWriter(s1.getOutputStream(),true);
                 mS.println("se ha recibido su hola mundo");
 
 
