@@ -10,9 +10,9 @@ import java.net.Socket;
 public class Servidor {
     public static void main(String[] args) {
         String[] respuestas = {"Desde las 10:00 hasta las 21:00", "Dias festivos de Madrid", "Si","30 €"};
-        BufferedReader mE=null;
-        PrintWriter mS=null;
-    try(ServerSocket servidor = new ServerSocket(3000);) {
+        BufferedReader mE;
+        PrintWriter mS;
+    try(ServerSocket servidor = new ServerSocket(3001);) {
             while(true){
                 System.out.println("Esperando peticion ...");
                 Socket s1 = servidor.accept();
@@ -20,13 +20,12 @@ public class Servidor {
                 String pregunta = mE.readLine();
                 int indice = Integer.parseInt(pregunta);
                  mS = new PrintWriter(s1.getOutputStream(),true);
-                mS.println(respuestas[indice-1]);
-                System.out.println(respuestas[indice-1]);
+                mS.println("se ha recibido su hola mundo");
 
 
              }
          } catch (IOException e) {
-         throw new RuntimeException(e);
+        System.out.println(e.toString());
      }
     }
     }
